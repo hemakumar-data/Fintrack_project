@@ -1,0 +1,9 @@
+{
+	"name": "fintrackadf",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "9f583c66-a844-4073-8264-ddb3658e5786",
+		"tenantId": "4eecc288-512b-4e6f-8925-0c16b977d079"
+	}
+}

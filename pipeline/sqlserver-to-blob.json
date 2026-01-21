@@ -12,6 +12,7 @@
 						"value": "@pipeline().parameters.loop_input",
 						"type": "Expression"
 					},
+					"batchCount": 20,
 					"activities": [
 						{
 							"name": "Azure sql to dataLake",
@@ -148,7 +149,7 @@
 							}
 						},
 						{
-							"name": "If Condition1",
+							"name": "checking records",
 							"type": "IfCondition",
 							"dependsOn": [
 								{
@@ -160,6 +161,10 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
+								"expression": {
+									"value": "@greater(activity('Azure sql to dataLake').output.dataRead,0)",
+									"type": "Expression"
+								},
 								"ifFalseActivities": [
 									{
 										"name": "Delete Empty file",

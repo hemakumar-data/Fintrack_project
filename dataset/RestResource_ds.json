@@ -1,0 +1,23 @@
+{
+	"name": "RestResource_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Restcurrecy_ls",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_relativeUrl": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@concat(variables('currentDate'),'?from=USD&to=INR')\n",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}

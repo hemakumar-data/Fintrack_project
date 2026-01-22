@@ -3,37 +3,102 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
+				"name": "loop engine",
+				"type": "Until",
 				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "RestSource",
-						"httpRequestTimeout": "00:01:40",
-						"requestInterval": "00.00:00:00.010",
-						"requestMethod": "GET",
-						"paginationRules": {
-							"supportRFC5988": "true"
-						}
+					"expression": {
+						"value": "@greater(variables('v_currentDate'),pipeline().parameters.p_endDate)",
+						"type": "Expression"
 					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "RestResource_ds",
-						"type": "DatasetReference"
-					}
-				]
+					"activities": [
+						{
+							"name": "Api call to datalake",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "RestResource_ds",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_date": {
+											"value": "@variables('v_currentDate')",
+											"type": "Expression"
+										},
+										"p_from": {
+											"value": "@pipeline().parameters.p_from",
+											"type": "Expression"
+										},
+										"p_to": {
+											"value": "@pipeline().parameters.p_to",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Rest_curency_csv",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
 			}
 		],
+		"parameters": {
+			"p_startDate": {
+				"type": "string"
+			},
+			"p_endDate": {
+				"type": "string"
+			},
+			"p_from": {
+				"type": "string"
+			},
+			"p_to": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"v_currentDate": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }

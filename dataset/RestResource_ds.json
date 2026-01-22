@@ -6,7 +6,13 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"p_relativeUrl": {
+			"p_date": {
+				"type": "string"
+			},
+			"p_from": {
+				"type": "string"
+			},
+			"p_to": {
 				"type": "string"
 			}
 		},

@@ -5,7 +5,14 @@
 			{
 				"name": "loop engine",
 				"type": "Until",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "loop controller trough date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
@@ -88,9 +95,74 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "increment Date",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Api call to datalake",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_nextDate",
+								"value": {
+									"value": "@formatDateTime(addDays(variables('v_currentDate'), 1),'yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "currentDate Update",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "increment Date",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "v_currentDate",
+								"value": {
+									"value": "@variables('v_nextDate')",
+									"type": "Expression"
+								}
+							}
 						}
 					],
 					"timeout": "0.12:00:00"
+				}
+			},
+			{
+				"name": "loop controller trough date",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_currentDate",
+					"value": {
+						"value": "@pipeline().parameters.p_startDate",
+						"type": "Expression"
+					}
 				}
 			}
 		],
@@ -110,6 +182,9 @@
 		},
 		"variables": {
 			"v_currentDate": {
+				"type": "String"
+			},
+			"v_nextDate": {
 				"type": "String"
 			}
 		},

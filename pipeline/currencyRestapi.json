@@ -43,14 +43,12 @@
 									}
 								},
 								"sink": {
-									"type": "DelimitedTextSink",
+									"type": "JsonSink",
 									"storeSettings": {
 										"type": "AzureBlobFSWriteSettings"
 									},
 									"formatSettings": {
-										"type": "DelimitedTextWriteSettings",
-										"quoteAllText": true,
-										"fileExtension": ".txt"
+										"type": "JsonWriteSettings"
 									}
 								},
 								"enableStaging": false
@@ -77,7 +75,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "Rest_curency_csv",
+									"referenceName": "ApiJson",
 									"type": "DatasetReference",
 									"parameters": {
 										"p_date": {
@@ -173,7 +171,7 @@
 			},
 			"p_endDate": {
 				"type": "string",
-				"defaultValue": "2025-01-10"
+				"defaultValue": "2025-01-01"
 			},
 			"p_from": {
 				"type": "string",

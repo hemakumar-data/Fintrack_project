@@ -22,7 +22,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "date=@{dataset().p_date}/from=@{dataset().p_from}_to=@{dataset().p_to}.json\n",
+					"value": "date=@{dataset().p_date}/from=@{dataset().p_from}_to=@{dataset().p_to}.csv\n",
 					"type": "Expression"
 				},
 				"folderPath": "currency",

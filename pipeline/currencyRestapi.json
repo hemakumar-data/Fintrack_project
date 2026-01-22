@@ -168,16 +168,20 @@
 		],
 		"parameters": {
 			"p_startDate": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "2025-01-01"
 			},
 			"p_endDate": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "2025-01-10"
 			},
 			"p_from": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "USD"
 			},
 			"p_to": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "INR"
 			}
 		},
 		"variables": {

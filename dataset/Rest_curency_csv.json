@@ -22,10 +22,13 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "date=@{dataset().p_date}/from=@{dataset().p_from}_to=@{dataset().p_to}.csv\n",
+					"value": "from=@{dataset().p_from}_to=@{dataset().p_to}.csv\n\n",
 					"type": "Expression"
 				},
-				"folderPath": "currency",
+				"folderPath": {
+					"value": "currency/date=@{dataset().p_date}\n",
+					"type": "Expression"
+				},
 				"fileSystem": "bronze"
 			},
 			"columnDelimiter": ",",

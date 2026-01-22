@@ -6,13 +6,13 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"p_container": {
+			"p_date": {
 				"type": "string"
 			},
-			"p_folder": {
+			"p_from": {
 				"type": "string"
 			},
-			"p_file": {
+			"p_to": {
 				"type": "string"
 			}
 		},
@@ -21,6 +21,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "date=@{dataset().p_date}/from=@{dataset().p_from}_to=@{dataset().p_to}.json\n",
+					"type": "Expression"
+				},
 				"folderPath": "currency",
 				"fileSystem": "bronze"
 			},

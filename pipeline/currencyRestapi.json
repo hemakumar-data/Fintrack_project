@@ -71,7 +71,21 @@
 							"outputs": [
 								{
 									"referenceName": "Rest_curency_csv",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"p_date": {
+											"value": "@variables('v_currentDate')",
+											"type": "Expression"
+										},
+										"p_from": {
+											"value": "@pipeline().parameters.p_from",
+											"type": "Expression"
+										},
+										"p_to": {
+											"value": "@pipeline().parameters.p_to",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}

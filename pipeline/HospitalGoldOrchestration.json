@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Metadata1",
+				"name": "silverFileCount",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -36,7 +36,7 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata1",
+						"activity": "lastFileCout",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -45,7 +45,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greaterOrEquals(length(activity('Get Metadata1').output.childItems), 5)",
+						"value": "@greater(\n   sub(\n      length(activity('silverFileCount').output.childItems),\n      activity('lastFileCount').output.firstRow.last_file_count\n   ),\n   5\n)",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -124,6 +124,49 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "lastFileCout",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "silverFileCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "Json_dynamic",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_container": "silverhsp",
+							"p_folder": "controlcdc",
+							"p_file": "cdc.json"
+						}
+					},
+					"firstRowOnly": true
 				}
 			}
 		],

@@ -1,0 +1,10 @@
+{
+	"name": "Hospitalvault",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://hospital1vault.vault.azure.net/"
+		}
+	}
+}

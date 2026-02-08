@@ -1,0 +1,132 @@
+{
+	"name": "HospitalGoldOrchestration",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Parquet1",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "ParquetReadSettings"
+					}
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greaterOrEquals(length(activity('Get Metadata1').output.childItems), 5)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Dim_department",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/hemakumar01142_gmail.com#ext#@hemakumar01142gmail.onmicrosoft.com/hospital-analytics/03_dim_department"
+							},
+							"linkedServiceName": {
+								"referenceName": "Hospitaldatabricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Dim_patient",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Dim_department",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/hemakumar01142_gmail.com#ext#@hemakumar01142gmail.onmicrosoft.com/hospital-analytics/03_gold_dim_patients"
+							},
+							"linkedServiceName": {
+								"referenceName": "Hospitaldatabricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "FactTable",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Dim_patient",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/hemakumar01142_gmail.com#ext#@hemakumar01142gmail.onmicrosoft.com/hospital-analytics/03gold_fact"
+							},
+							"linkedServiceName": {
+								"referenceName": "Hospitaldatabricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}

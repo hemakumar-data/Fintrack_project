@@ -1,0 +1,53 @@
+{
+	"name": "Parquet1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HospitalStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "patient_flow",
+				"fileSystem": "silverhsp"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "patient_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "gender",
+				"type": "UTF8"
+			},
+			{
+				"name": "age",
+				"type": "INT_32"
+			},
+			{
+				"name": "department",
+				"type": "UTF8"
+			},
+			{
+				"name": "admission_time",
+				"type": "INT96"
+			},
+			{
+				"name": "discharge_time",
+				"type": "INT96"
+			},
+			{
+				"name": "bed_id",
+				"type": "INT_32"
+			},
+			{
+				"name": "hospital_id",
+				"type": "INT_32"
+			}
+		]
+	}
+}

@@ -36,7 +36,7 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "lastFileCout",
+						"activity": "lastFileCount",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -122,12 +122,86 @@
 								"referenceName": "Hospitaldatabricks",
 								"type": "LinkedServiceReference"
 							}
+						},
+						{
+							"name": "updateCDC",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "FactTable",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "JsonSource",
+									"additionalColumns": [
+										{
+											"name": "last_file_count",
+											"value": {
+												"value": "@string(length(activity('silverFileCount').output.childItems))\n",
+												"type": "Expression"
+											}
+										}
+									],
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "JsonReadSettings"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "Json_dynamic",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_container": "silverhsp",
+										"p_folder": "controlcdc",
+										"p_file": "empty.json"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Json_dynamic",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_container": "silverhsp",
+										"p_folder": "controlcdc",
+										"p_file": "cdc.json"
+									}
+								}
+							]
 						}
 					]
 				}
 			},
 			{
-				"name": "lastFileCout",
+				"name": "lastFileCount",
 				"type": "Lookup",
 				"dependsOn": [
 					{
